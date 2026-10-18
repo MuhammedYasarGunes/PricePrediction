@@ -1,0 +1,12 @@
+# Kaggle verisi ve üretilen çıktılar repoya girmez
+data/
+eda_ciktilari/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# macOS
+.DS_Store
