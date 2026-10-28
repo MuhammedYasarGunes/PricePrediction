@@ -19,7 +19,7 @@ Bu modelin parametresi yoktur; test dönemindeki hatası, sonraki modellerin kar
 referanstır (H2). Ana modelden beklenen en az %30 iyileşme (H4) bu değere göre ölçülür.
 
 Kullanım:
-  python 04_temel_model.py --girdi-dir data/islenmis --cikti-dir model_ciktilari
+  python src/04_temel_model.py --girdi-dir data/islenmis --cikti-dir model_ciktilari
 """
 import argparse
 from pathlib import Path

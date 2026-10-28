@@ -16,7 +16,7 @@ Rapor 2.4'teki kurallar:
   - Customers kullanılmaz (tahmin anında bilinmez, veri sızıntısı).
 
 Kullanım:
-  python 01_veri_hazirlama.py --veri-dir data --cikti-dir data/islenmis
+  python src/01_veri_hazirlama.py --veri-dir data --cikti-dir data/islenmis
 """
 import argparse
 from pathlib import Path

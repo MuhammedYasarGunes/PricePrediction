@@ -6,7 +6,7 @@
 2) Negatif kontrol: kasıtlı olarak 1 gün sızdıran bir sürümün sızıntı testinde yakalandığını doğrular.
 
 Kullanım (önce 01 ve 03 çalıştırılmış olmalı):
-  python kontrol_oznitelikler.py --girdi-dir data/islenmis --oznitelik-dir data/oznitelikler --ufuk 42
+  python src/kontrol_oznitelikler.py --girdi-dir data/islenmis --oznitelik-dir data/oznitelikler --ufuk 42
 """
 import argparse
 import importlib.util

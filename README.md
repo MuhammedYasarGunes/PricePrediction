@@ -7,12 +7,12 @@ Bu repo şu an dört aşamayı içeriyor: **veri hazırlama**, **keşifsel veri 
 > **English:** Team project on the Rossmann Store Sales dataset (1,115 stores, ~1M daily records). This repo covers data preparation (leak-free features, log-transformed target, MAD-based outlier flags), exploratory analysis with 10 charts, a horizon-aware feature pipeline (forecast horizon H as a single parameter, verified by an automatic leakage test) and a seasonal naive baseline (test RMSPE 0.349). LightGBM and Prophet come next.
 
 <p align="center">
-  <img src="03_promosyon_etkisi.png" width="720" alt="Promosyonun haftanın gününe göre satışa etkisi">
+  <img src="gorseller/eda/03_promosyon_etkisi.png" width="720" alt="Promosyonun haftanın gününe göre satışa etkisi">
 </p>
 
 ## Aşamalar
 
-**1. Veri hazırlama** · [`01_veri_hazirlama.py`](01_veri_hazirlama.py)
+**1. Veri hazırlama** · [`01_veri_hazirlama.py`](src/01_veri_hazirlama.py)
 
 - Kapalı (`Open=0`) ve satışı sıfır olan günler eğitimden çıkarılır; bu günler için tahmin 0 atanır.
 - `CompetitionDistance` eksikleri "yakında rakip yok" anlamında büyük bir değerle doldurulur; eksik rakip açılış tarihleri ayrı bir kategori olur.
@@ -22,25 +22,25 @@ Bu repo şu an dört aşamayı içeriyor: **veri hazırlama**, **keşifsel veri 
 - `Customers` kullanılmaz: tahmin anında bilinmez, kullanılırsa veri sızıntısı olur.
 - Çıktı olarak işlenmiş veri ve bir veri kalite raporu üretilir.
 
-**2. Keşifsel analiz** · [`02_eda.py`](02_eda.py)
+**2. Keşifsel analiz** · [`02_eda.py`](src/02_eda.py)
 
-10 grafik üretir ve [`bulgu_ozeti.md`](bulgu_ozeti.md) dosyasını verideki gerçek sayılardan otomatik yazar.
+10 grafik üretir ve [`bulgu_ozeti.md`](raporlar/bulgu_ozeti.md) dosyasını verideki gerçek sayılardan otomatik yazar.
 
-**3. Öznitelik mühendisliği** · [`03_oznitelik_muhendisligi.py`](03_oznitelik_muhendisligi.py)
+**3. Öznitelik mühendisliği** · [`03_oznitelik_muhendisligi.py`](src/03_oznitelik_muhendisligi.py)
 
 - Tahmin ufku `H` tek bir parametredir (`--ufuk`, varsayılan 42 gün); dört ufuk (7, 28, 42, 84) tek komutla üretilir.
 - 2. haftadaki 17 özniteliğe 8 yeni öznitelik eklenir (toplam 25): promosyon bloğunun kaçıncı günü, en yakın resmî tatile kalan / tatilden geçen gün ve geçmiş satıştan türetilen 5 öznitelik.
 - Geçmiş satış öznitelikleri en az `H` gün gecikmelidir; `t` günü için yalnızca `t−H` ve öncesi kullanılır.
 - **Sızıntı testi:** kesim tarihinden sonraki satışlar rastgele değiştirilir; kesim + `H` gününe kadar hiçbir öznitelik değişmemelidir. 4 ufuk × 3 kesim = 12 testin hepsi geçer.
-- Sonuçlar: [`oznitelik_raporu.md`](oznitelik_raporu.md). Bağımsız kontrol: [`kontrol_oznitelikler.py`](kontrol_oznitelikler.py).
+- Sonuçlar: [`oznitelik_raporu.md`](raporlar/oznitelik_raporu.md). Bağımsız kontrol: [`kontrol_oznitelikler.py`](src/kontrol_oznitelikler.py).
 
-**4. Mevsimsel naive temel model** · [`04_temel_model.py`](04_temel_model.py)
+**4. Mevsimsel naive temel model** · [`04_temel_model.py`](src/04_temel_model.py)
 
 - Son gözlenen hafta, ufuk boyunca tekrarlanır; kapalı günlerin tahmini 0'dır.
 - Üç çapraz doğrulama katmanı, test dönemi (20.06–31.07.2015) ve 08.05.2015 kökenli ufuk analizi için hata hesaplar.
-- Sonuçlar: [`temel_model_ozeti.md`](temel_model_ozeti.md).
+- Sonuçlar: [`temel_model_ozeti.md`](raporlar/temel_model_ozeti.md).
 
-Ortak tarih bölmeleri ve hata ölçütleri [`ortak.py`](ortak.py) dosyasındadır.
+Ortak tarih bölmeleri ve hata ölçütleri [`ortak.py`](src/ortak.py) dosyasındadır.
 
 ## Öne çıkan bulgular
 
@@ -56,9 +56,29 @@ Aşağıdaki karşılaştırmalar betimleyicidir, nedensellik iddiası taşımaz
 
 | | |
 |---|---|
-| <img src="01_aylik_ortalama_satis.png" alt="Aylık ortalama satış"> | <img src="05_yillik_mevsimsellik.png" alt="Yıllık mevsimsellik"> |
-| <img src="02_haftanin_gunu.png" alt="Haftanın gününe göre satış"> | <img src="09_satis_dagilimi.png" alt="Satış dağılımı"> |
-| <img src="11_bolme_semasi.png" alt="Kronolojik bölme şeması"> | <img src="13_naive_ufuk_hata.png" alt="Naive modelin ufka ve haftaya göre hatası"> |
+| <img src="gorseller/eda/01_aylik_ortalama_satis.png" alt="Aylık ortalama satış"> | <img src="gorseller/eda/05_yillik_mevsimsellik.png" alt="Yıllık mevsimsellik"> |
+| <img src="gorseller/eda/02_haftanin_gunu.png" alt="Haftanın gününe göre satış"> | <img src="gorseller/eda/09_satis_dagilimi.png" alt="Satış dağılımı"> |
+| <img src="gorseller/model/11_bolme_semasi.png" alt="Kronolojik bölme şeması"> | <img src="gorseller/model/13_naive_ufuk_hata.png" alt="Naive modelin ufka ve haftaya göre hatası"> |
+
+## Proje yapısı
+
+```
+PricePrediction/
+├── src/                          # kodlar (sırayla çalıştırılır)
+│   ├── 01_veri_hazirlama.py
+│   ├── 02_eda.py
+│   ├── 03_oznitelik_muhendisligi.py
+│   ├── 04_temel_model.py
+│   ├── ortak.py                  # tarih bölmeleri, hata ölçütleri, grafik stili
+│   └── kontrol_oznitelikler.py   # bağımsız kontrol
+├── gorseller/
+│   ├── eda/                      # 01–10: keşifsel analiz grafikleri
+│   └── model/                    # 11–14: bölme şeması ve temel model grafikleri
+├── raporlar/                     # kodların ürettiği bulgu ve sonuç özetleri
+├── data/                         # Kaggle verisi (repoya girmez)
+├── requirements.txt
+└── README.md
+```
 
 ## Çalıştırma
 
@@ -66,11 +86,11 @@ Aşağıdaki karşılaştırmalar betimleyicidir, nedensellik iddiası taşımaz
 
 ```bash
 pip install -r requirements.txt
-python 01_veri_hazirlama.py --veri-dir data --cikti-dir data/islenmis
-python 02_eda.py --girdi-dir data/islenmis --cikti-dir eda_ciktilari
-python 03_oznitelik_muhendisligi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler
-python 04_temel_model.py --girdi-dir data/islenmis --cikti-dir model_ciktilari
-python kontrol_oznitelikler.py      # isteğe bağlı bağımsız kontrol
+python src/01_veri_hazirlama.py --veri-dir data --cikti-dir data/islenmis
+python src/02_eda.py --girdi-dir data/islenmis --cikti-dir eda_ciktilari
+python src/03_oznitelik_muhendisligi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler
+python src/04_temel_model.py --girdi-dir data/islenmis --cikti-dir model_ciktilari
+python src/kontrol_oznitelikler.py      # isteğe bağlı bağımsız kontrol
 ```
 
 `pyarrow` kuruluysa işlenmiş veri Parquet, değilse sıkıştırılmış CSV olarak kaydedilir.

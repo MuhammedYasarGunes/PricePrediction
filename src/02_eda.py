@@ -6,7 +6,7 @@ Girdi : 01_veri_hazirlama.py çıktısı (islenmis_tam.parquet veya islenmis_tam
         <cikti-dir>/bulgu_ozeti.md    (verideki gerçek sayılardan otomatik üretilen özet)
 
 Kullanım:
-  python 02_eda.py --girdi-dir data/islenmis --cikti-dir eda_ciktilari
+  python src/02_eda.py --girdi-dir data/islenmis --cikti-dir eda_ciktilari
 
 Not: Ortalamalar "açık ve satışı > 0" olan mağaza-günleri üzerinden hesaplanır.
 Gruplar arası farklar (ör. promosyonlu / promosyonsuz) nedensellik kanıtı değildir;

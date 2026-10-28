@@ -24,8 +24,8 @@ Yeni öznitelikler (2. haftadaki 17 özniteliğe eklenir):
   MagazaGunOrt      aynı haftagününün t-L'de biten son 13 haftadaki ortalama log satışı
 
 Kullanım:
-  python 03_oznitelik_muhendisligi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler
-  python 03_oznitelik_muhendisligi.py --ufuk 7 28 42 84        # ufuk analizi için dört H birden
+  python src/03_oznitelik_muhendisligi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler
+  python src/03_oznitelik_muhendisligi.py --ufuk 7 28 42 84        # ufuk analizi için dört H birden
 """
 import argparse
 import math
