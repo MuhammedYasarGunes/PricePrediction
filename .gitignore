@@ -1,6 +1,7 @@
 # Kaggle verisi ve üretilen çıktılar repoya girmez
 data/
 eda_ciktilari/
+model_ciktilari/
 
 # Python
 __pycache__/
