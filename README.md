@@ -47,6 +47,14 @@ Bu repo şu an beş aşamayı içeriyor: **veri hazırlama**, **keşifsel veri a
 - `SatisGecikmePromoDuz` özniteliği, mağaza bazında 91 günlük pencereden hesaplanan log promosyon etkisi (`delta_store`) ile düzeltilir; log satışla Pearson korelasyonu H=7 için 0,638'den 0,879'a, H=42 için 0,767'den 0,860'a yükselir.
 - Sonuçlar: [`hafta5_ozet.md`](raporlar/hafta5_ozet.md) ve [`hafta5_sonuclar.json`](raporlar/hafta5_sonuclar.json).
 
+**6. Değerlendirme altyapısı** · [`06_degerlendirme_altyapisi.py`](src/06_degerlendirme_altyapisi.py)
+
+- Tahmin sözleşmesi doğrulayıcı (`tahmin_dogrula`): model karşılaştırmaları için tekil anahtarlar, pozitif satış satırlarında metrik hesabı, kapalı günlerde sıfır tahmin ve eksiksiz tahmin kontrolleri.
+- Kayan kökenli çapraz doğrulama (Rolling-Origin): 21 pencere (RO01–RO17, K1–K3, Test; her biri 42 gün) boyunca Naive ve Naive-P yöntemlerinin genelleme performansı.
+- Diebold-Mariano (DM) önem testleri: pencere düzeyi ve günlük test penceresi (Newey-West otokorelasyon düzeltmesi).
+- Alt grup kırılımları (mağaza tipi, promosyon, resmî ve okul tatilleri, haftanın günü, 6 haftalık test ufku) ve en kötü 10 mağaza analizi.
+- Sonuçlar: [`hafta7_ozet.md`](raporlar/hafta7_ozet.md), [`hafta7_sonuclar.json`](raporlar/hafta7_sonuclar.json), 17–18 numaralı grafikler.
+
 Ortak tarih bölmeleri ve hata ölçütleri [`ortak.py`](src/ortak.py) dosyasındadır.
 
 ## Öne çıkan bulgular
@@ -58,7 +66,7 @@ Aşağıdaki karşılaştırmalar betimleyicidir, nedensellik iddiası taşımaz
 - **Rekabet:** rakip mesafesi ile mağaza satışı arasında neredeyse ilişki yok (Spearman −0,03).
 - **Hedef dağılımı:** log dönüşümü çarpıklığı 1,59'dan −0,11'e indiriyor; modelde log hedef kullanılmasının gerekçesi bu.
 - **Veri boşluğu:** 2014'ün ikinci yarısında yaklaşık altı ay boyunca 180 mağazanın kaydı yok. Bu dönemde gecikmeli öznitelikler eksik kalıyor.
-- **Temel model:** mevsimsel naive yöntemin test RMSPE'si 0,349. Ana modelin %30 iyileşme hedefi için test RMSPE'si 0,244 (0,349 × 0,70 = 0,2443).
+- **Temel model:** mevsimsel naive yöntemin test RMSPE'si 0,349. Ana modelin %30 iyileşme hedefi için test RMSPE'si 0,2446 (0,3494 × 0,70 = 0,24460).
 - **Promosyon döngüsü:** promosyonlar zincir genelinde ve iki haftalık döngüyle uygulanıyor. Naive yöntem, promosyon durumu son haftayla aynı olan günlerde 0,148, farklı olan günlerde 0,513 RMSPE veriyor. Naive-P bu uyumsuzluğu tamamen gidererek test RMSPE'sini 0,146'ya düşürüyor.
 
 | | |
@@ -77,11 +85,12 @@ PricePrediction/
 │   ├── 03_oznitelik_muhendisligi.py
 │   ├── 04_temel_model.py
 │   ├── 05_promosyon_duzeltmesi.py
+│   ├── 06_degerlendirme_altyapisi.py
 │   ├── ortak.py                  # tarih bölmeleri, hata ölçütleri, grafik stili
 │   └── kontrol_oznitelikler.py   # bağımsız kontrol
 ├── gorseller/
 │   ├── eda/                      # 01–10: keşifsel analiz grafikleri
-│   └── model/                    # 11–16: bölme şeması, temel model ve promosyon düzeltmesi grafikleri
+│   └── model/                    # 11–18: bölme şeması, temel model, promosyon düzeltmesi ve değerlendirme grafikleri
 ├── raporlar/                     # kodların ürettiği bulgu ve sonuç özetleri
 ├── data/                         # Kaggle verisi (repoya girmez)
 ├── requirements.txt
@@ -99,6 +108,8 @@ python src/02_eda.py --girdi-dir data/islenmis --cikti-dir eda_ciktilari
 python src/03_oznitelik_muhendisligi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler
 python src/04_temel_model.py --girdi-dir data/islenmis --cikti-dir model_ciktilari
 python src/05_promosyon_duzeltmesi.py --girdi-dir data/islenmis --cikti-dir data/oznitelikler_v2
+python src/06_degerlendirme_altyapisi.py --girdi-dir data/islenmis --cikti-dir data/tahminler
+python src/06_degerlendirme_altyapisi.py --girdi-dir data/islenmis --dogrula data/tahminler/naive_tahminleri.parquet
 python src/kontrol_oznitelikler.py                     # 03 bağımsız kontrolü
 python src/kontrol_oznitelikler.py --promo-kontrol     # 05 promo öznitelikleri kontrolü
 ```
